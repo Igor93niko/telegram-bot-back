@@ -45,8 +45,9 @@ bot.on('message', async(msg) => {
 });
 
 app.post('/web-data',async(req,res)=>{
-  const {queryId, products, totalPrice} = req.body;
+  const {queryId, products=[], totalPrice} = req.body;
   try {
+    console.log(req.body);
     await bot.answerWebAppQuery(queryId, {
       type:'article',
       id:queryId,
@@ -54,16 +55,8 @@ app.post('/web-data',async(req,res)=>{
       input_message_content:'Общая цена покупки' + totalPrice
     });
     return res.status(200).json({});
-    
   } catch (error) {
-    await bot.answerWebAppQuery(queryId, {
-      type:'article',
-      id:queryId,
-      title:'Не удалось приобрести товар',
-      input_message_content:'Не удалось приобрести товар'
-    });
     return res.status(500).json({});
-
   }
 })
 
